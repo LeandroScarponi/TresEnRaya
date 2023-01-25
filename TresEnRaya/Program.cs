@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TresEnRaya
 {
@@ -65,7 +70,21 @@ namespace TresEnRaya
                 PonerCoordenadas(ref tablero, coordenada, letra1);
                 Console.Clear();
                 Console.WriteLine(DibujarTablero(tablero));
+                SeHaOcupadoTodo(ref tablero);
 
+                if (SeHaOcupadoTodo(ref tablero))
+                {
+                    Console.Clear();
+                    Console.WriteLine("El juego ha terminado sin ganadores.");
+                    Console.WriteLine("Pulse una tecla para comenzar de nuevo.");
+                    Console.ReadKey();
+
+                    PedirJugadores(ref jugador1, ref jugador2, letra1, letra2);
+                    InicializarTablero(ref tablero);
+                    Console.WriteLine(DibujarTablero(tablero));
+                    ComenzarJuego(ref tablero, jugador1, jugador2, coordenada, letra1, letra2);
+
+                }
 
                 if (!HayGanador(ref tablero))
                 {
@@ -73,6 +92,7 @@ namespace TresEnRaya
                     PonerCoordenadas(ref tablero, coordenada, letra2);
                     Console.Clear();
                     Console.WriteLine(DibujarTablero(tablero));
+                    
 
                     if (HayGanador(ref tablero))
                     {
@@ -281,6 +301,22 @@ namespace TresEnRaya
                     
 
             }
+        }
+
+        public void Close()
+        {
+
+        }
+
+        static bool SeHaOcupadoTodo(ref char[,]tablero)
+        {
+            if (tablero[0, 0] != ' ' && tablero[1,0] != ' ' && tablero[2, 0] != ' ' && tablero[0, 1] != ' ' 
+                && tablero[1, 1] != ' ' && tablero[2, 1] != ' ' && tablero[0, 2] != ' ' && tablero[1, 2] != ' ' && tablero[2, 2] != ' ')
+            {
+
+                return true;
+            }
+            return false;
         }
 
     }
